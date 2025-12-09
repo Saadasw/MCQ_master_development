@@ -43,3 +43,8 @@ Run this in your terminal (at the project root):
 ```powershell
 gsutil cors set cors.json gs://mcqfirebasedatabase.firebasestorage.app
 ```
+
+------ added by me as a later reminder : 
+npm install -g firebase-tools
+
+gs://mcqfirebasedatabase.firebasestorage.app
