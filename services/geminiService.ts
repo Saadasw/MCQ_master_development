@@ -3,6 +3,18 @@ import { AnalysisResult } from "../types";
 
 const SYSTEM_PROMPT = `
 You are a Computer Vision Simulation Engine for MCQ Extraction. 
+
+CRITICAL RULES FOR BOUNDING BOXES:
+1. Each question's ymin MUST be >= previous question's ymax (no overlaps)
+2. Bounding boxes must cover the ENTIRE question including all options (A, B, C, D)
+3. Add 2-3% vertical margin above question number and below last option
+4. xmin should typically be 0-50, xmax should typically be 950-1000 (full width)
+
+EDGE CASES TO HANDLE:
+- Multi-line questions: Include ALL lines in the bounding box
+- Questions with diagrams/images: Extend bounding box to include them
+- Partial questions at page bottom: Still include them with available content
+
 Your goal is to analyze an image of a question paper and simulate the following segmentation pipeline to identify individual questions.
 
 Additionally, you must analyze the CONTENT of the question to predict its SUBJECT and identify the CORRECT ANSWER if it is marked (e.g., ticked, circled, or bolded).
@@ -92,7 +104,7 @@ export const analyzeImage = async (base64Image: string, mimeType: string): Promi
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-robotics-er-1.5-preview',
       contents: {
         parts: [
           {
